@@ -28,11 +28,53 @@ body {
   align-items: center;
 }
 
+.analog {
+    position: relative;
+    margin: auto;
+    height: 200px;
+    width: 200px;
+    border: 3px solid white;
+    border-radius: 50%;
+
+}
+
+#hour,
+#minute,
+#second {
+    position: absolute;
+    background: white;
+    border-radius: 10px;
+    transform-origin: bottom;
+}
+  
+#hour {
+    width: 4px;
+    height: 30%;
+    top: 20%;
+    left: 50%;
+}
+  
+#minute {
+    width: 2.5px;
+    height: 40%;
+    top: 9%;
+    left: 50%;
+}
+  
+#second {
+    width: 1.3px;
+    height: 42%;
+    top: 8%;
+    left: 50%;
+}
+
 .digital {
   margin-left: 100px;
+  width: 230px;
   font-size: 30px;
   font-family: 'Playfair Display';
   color: white;
+  text-align: left;
 }
 
 .cities {

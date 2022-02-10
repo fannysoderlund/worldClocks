@@ -2,6 +2,8 @@ const selectCity = document.getElementById('select-city');
 const cityList = document.getElementsByName('select-city-list')[0];
 const cityHeader = document.getElementById('current-city');
 
+let citiesList = new Array;
+
 function setTime(timeZone) {
   setInterval(() => {
     date = new Date();
@@ -31,8 +33,13 @@ setTime(1);
 fillDatalist();
 
 cityList.addEventListener('input', () => {
-  cityHeader.innerHTML = cityList.value;
-
+  console.log(citiesList)
+  if (citiesList.includes(cityList.value)) {
+    cityHeader.innerHTML = cityList.value;
+    console.log('match')
+  } else {
+    console.log('no match')
+  }
 });
 
 
@@ -40,10 +47,8 @@ async function fillDatalist() {
   let rawData = await fetch('timezones.json')
   let countries = await rawData.json()
 
-  let citiesList = new Array;
-
   for (let i = 0; i < countries.length; i++) {
-    citiesList.push(countries[i].WindowsTimeZones[0].Name.split(')')[1]);
+    citiesList.push(countries[i].WindowsTimeZones[0].Name.split(') ')[1]);
   }
 
   citiesList = citiesList.filter((c, index) => {
@@ -53,7 +58,7 @@ async function fillDatalist() {
   for (city of citiesList) {
     let tempArray = new Array
     if (city.includes(',')) {
-      tempArray = city.split(',');
+      tempArray = city.split(', ');
       citiesList = citiesList.concat(tempArray);
       const index = citiesList.indexOf(city);
       citiesList.splice(index, 1);

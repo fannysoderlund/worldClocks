@@ -50,14 +50,14 @@ body {
 #hour {
     width: 4px;
     height: 30%;
-    top: 18.5%;
+    top: 20%;
     left: 50%;
 }
   
 #minute {
     width: 2.5px;
     height: 40%;
-    top: 9%;
+    top: 10%;
     left: 50%;
 }
   

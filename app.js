@@ -1,16 +1,22 @@
 const selectCity = document.getElementById('select-city');
-const cityList = document.getElementsByName('select-city-list')[0];
+const cityListElement = document.getElementsByName('select-city-list')[0];
 const cityHeader = document.getElementById('current-city');
 
-let citiesList = new Array;
+let timeZoneHour = 0;
+let timeZoneMinutes = 0;
+let citiesList = [];
 
-function setTime(timeZone) {
+let countries;
+
+function setTime() {
+
   setInterval(() => {
     date = new Date();
-    hr = date.getUTCHours() + timeZone;
+    hr = date.getUTCHours() + parseInt(timeZoneHour);
     hr = hr % 12;
     hr = hr ? hr : 12;
-    min = date.getUTCMinutes();
+    min = date.getUTCMinutes() + parseInt(timeZoneMinutes);
+    min = min % 60;
     sec = date.getUTCSeconds();
     hr_rotation = 30 * hr + min / 2;
     min_rotation = 6 * min;
@@ -29,48 +35,84 @@ function setTime(timeZone) {
   }, 1000);
 }
 
-setTime(1);
 fillDatalist();
+setTime();
 
-cityList.addEventListener('input', () => {
-  console.log(citiesList)
-  if (citiesList.includes(cityList.value)) {
-    cityHeader.innerHTML = cityList.value;
-    console.log('match')
-  } else {
-    console.log('no match')
+cityListElement.addEventListener('click', () => {
+  cityListElement.value = '';
+})
+
+cityListElement.addEventListener('input', () => {
+  let city;
+  if (city = citiesList.find(x => x.name === cityListElement.value)) {
+    cityHeader.innerHTML = cityListElement.value;
+    let hTimeZone = city.timeZone.split(':')[0];
+    if (hTimeZone.charAt(1) === '0') {
+      hTimeZone = hTimeZone.replace('0', '')
+    }
+    if (hTimeZone.charAt(0) === '+') {
+      hTimeZone = hTimeZone.replace('+', '')
+    }
+    let mTimeZone = city.timeZone.split(':')[1];
+    timeZoneHour = hTimeZone;
+    timeZoneMinutes = mTimeZone;
   }
 });
 
-
 async function fillDatalist() {
-  let rawData = await fetch('timezones.json')
-  let countries = await rawData.json()
+  let rawData = await fetch('timezones.json');
+  countries = await rawData.json();
 
   for (let i = 0; i < countries.length; i++) {
-    citiesList.push(countries[i].WindowsTimeZones[0].Name.split(') ')[1]);
+    let nameAndTimeZone = countries[i].WindowsTimeZones[0].Name;
+    let name = nameAndTimeZone.split(') ')[1];
+    let timeZone = nameAndTimeZone.split(')')[0].split('UTC')[1];
+    let city = {
+      name: name,
+      timeZone: timeZone
+    }
+    citiesList.push(city);
   }
 
-  citiesList = citiesList.filter((c, index) => {
-    return citiesList.indexOf(c) === index;
-  });
+  citiesList = Array.from(citiesList.reduce((a, o) => a.set(o.name, o), new Map()).values());
 
   for (city of citiesList) {
+    let tempArrayNames = new Array
     let tempArray = new Array
-    if (city.includes(',')) {
-      tempArray = city.split(', ');
+    if (city.name.includes(',')) {
+      tempArrayNames = city.name.split(', ');
+
+      for (let i = 0; i < tempArrayNames.length; i++) {
+        let thisCity = {
+          name: tempArrayNames[i],
+          timeZone: city.timeZone
+        }
+        tempArray.push(thisCity)
+      }
+
       citiesList = citiesList.concat(tempArray);
       const index = citiesList.indexOf(city);
       citiesList.splice(index, 1);
     }
   }
 
-  citiesList.sort()
+  citiesList.sort((a, b) => {
+    let fa = a.name.toLowerCase(),
+      fb = b.name.toLowerCase();
+
+    if (fa < fb) {
+      return -1;
+    }
+    if (fa > fb) {
+      return 1;
+    }
+    return 0;
+  });
 
   let html = '';
 
   for (city of citiesList) {
-    html += '<option>' + city + '</option>'
+    html += '<option>' + city.name + '</option>'
   }
 
   selectCity.innerHTML = html;

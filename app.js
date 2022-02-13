@@ -13,8 +13,8 @@ function setTime() {
   setInterval(() => {
     date = new Date();
     hr = date.getUTCHours() + parseInt(timeZoneHour);
-    hr = hr % 12;
-    hr = hr ? hr : 12;
+    hr = hr % 24;
+    hr = hr ? hr : 24;
     min = date.getUTCMinutes() + parseInt(timeZoneMinutes);
     min = min % 60;
     sec = date.getUTCSeconds();

@@ -29,43 +29,51 @@ body {
 }
 
 .analog {
-    position: relative;
-    margin: auto;
-    height: 200px;
-    width: 200px;
-    border: 3px solid white;
-    border-radius: 50%;
+  position: relative;
+  margin: auto;
+  height: 200px;
+  width: 200px;
+  border: 3px solid white;
+  border-radius: 50%;
 
 }
 
 #hour,
 #minute,
-#second {
-    position: absolute;
-    background: white;
-    border-radius: 10px;
-    transform-origin: bottom;
+#second, 
+#center-dot {
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  transform-origin: bottom;
 }
   
 #hour {
-    width: 4px;
-    height: 30%;
-    top: 20%;
-    left: 50%;
+  width: 4px;
+  height: 30%;
+  top: 20%;
+  left: 50%;
 }
   
 #minute {
-    width: 2.5px;
-    height: 40%;
-    top: 10%;
-    left: 50%;
+  width: 2.5px;
+  height: 40%;
+  top: 10%;
+  left: 50%;
 }
   
 #second {
-    width: 1.3px;
-    height: 42%;
-    top: 8%;
-    left: 50%;
+  width: 1.3px;
+  height: 42%;
+  top: 8%;
+  left: 50%;
+}
+
+#center-dot {
+  width: 7px;
+  height: 7px;
+  top: 48.5%;
+  left: 49%;
 }
 
 .digital {

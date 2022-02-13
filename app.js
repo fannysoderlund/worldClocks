@@ -57,6 +57,7 @@ cityListElement.addEventListener('input', () => {
     timeZoneHour = hTimeZone;
     timeZoneMinutes = mTimeZone;
   }
+  document.body.style.backgroundImage = `url('images/${city.name}.jpeg')`;
 });
 
 async function fillDatalist() {

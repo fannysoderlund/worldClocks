@@ -9,12 +9,12 @@ let citiesList = [];
 let countries;
 
 function setTime() {
-
+  //update the current time every second
   setInterval(() => {
     date = new Date();
     hr = date.getUTCHours() + parseInt(timeZoneHour);
     hr = hr % 24;
-    hr = hr ? hr : 24;
+    hr = hr ? hr : 0;
     min = date.getUTCMinutes() + parseInt(timeZoneMinutes);
     min = min % 60;
     sec = date.getUTCSeconds();
@@ -38,6 +38,7 @@ function setTime() {
 fillDatalist();
 setTime();
 
+//clear input tag on user press
 cityListElement.addEventListener('click', () => {
   cityListElement.value = '';
 })
@@ -46,6 +47,7 @@ cityListElement.addEventListener('input', () => {
   let city;
   if (city = citiesList.find(x => x.name === cityListElement.value)) {
     cityHeader.innerHTML = cityListElement.value;
+    //shave timezone to a nice number for the global variable
     let hTimeZone = city.timeZone.split(':')[0];
     if (hTimeZone.charAt(1) === '0') {
       hTimeZone = hTimeZone.replace('0', '')
@@ -56,8 +58,10 @@ cityListElement.addEventListener('input', () => {
     let mTimeZone = city.timeZone.split(':')[1];
     timeZoneHour = hTimeZone;
     timeZoneMinutes = mTimeZone;
+
+    document.body.style.backgroundImage = `url('images/${city.name}.jpeg')`;
   }
-  document.body.style.backgroundImage = `url('images/${city.name}.jpeg')`;
+
 });
 
 async function fillDatalist() {
@@ -66,6 +70,7 @@ async function fillDatalist() {
 
   for (let i = 0; i < countries.length; i++) {
     let nameAndTimeZone = countries[i].WindowsTimeZones[0].Name;
+    //sort out name and timezones of citites
     let name = nameAndTimeZone.split(') ')[1];
     let timeZone = nameAndTimeZone.split(')')[0].split('UTC')[1];
     let city = {
@@ -75,11 +80,13 @@ async function fillDatalist() {
     citiesList.push(city);
   }
 
+  //remove duplicates
   citiesList = Array.from(citiesList.reduce((a, o) => a.set(o.name, o), new Map()).values());
 
   for (city of citiesList) {
     let tempArrayNames = new Array
     let tempArray = new Array
+    //if one entry contains several cities, split into several entries
     if (city.name.includes(',')) {
       tempArrayNames = city.name.split(', ');
 
@@ -97,6 +104,7 @@ async function fillDatalist() {
     }
   }
 
+  //sort cities alphabetically on their name
   citiesList.sort((a, b) => {
     let fa = a.name.toLowerCase(),
       fb = b.name.toLowerCase();
@@ -116,5 +124,6 @@ async function fillDatalist() {
     html += '<option>' + city.name + '</option>'
   }
 
+  //fill datalist with cities
   selectCity.innerHTML = html;
 }

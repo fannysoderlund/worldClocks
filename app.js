@@ -34,11 +34,23 @@ function setTime() {
       minute: '2-digit',
       second: '2-digit'
     }
-    let currentTime = new Intl.DateTimeFormat('en-US', options).format(date);
+    let currentTimeDigital = new Intl.DateTimeFormat('en-US', options).format(date);
+    digitalTime.textContent = currentTimeDigital;
 
-    let hr = currentTime.split(':')[0];
-    let min = currentTime.split(':')[1];
-    let sec = currentTime.split(':')[2];
+    options = {
+      timeZone: `${thisTimeZone}`,
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3
+    }
+
+    let currentTimeAnalog = new Intl.DateTimeFormat('en-US', options).format(date);
+
+    let hr = currentTimeAnalog.split(':')[0];
+    let min = currentTimeAnalog.split(':')[1];
+    let sec = currentTimeAnalog.split(':')[2];
 
     hr_rotation = 30 * hr + min / 2;
     min_rotation = 6 * min;
@@ -48,9 +60,8 @@ function setTime() {
     minute.style.transform = `rotate(${min_rotation}deg)`;
     second.style.transform = `rotate(${sec_rotation}deg)`;
 
-    digitalTime.textContent = currentTime;
 
-  }, 1000);
+  }, 1);
 }
 
 fillDatalist();
